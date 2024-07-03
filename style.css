@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Blinker:wght@200;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Blinker', sans-serif;
+}
+
+body {
+    background-color: #363535;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 80px; 
+}
+
+nav {
+    background-color: #212020;
+    color: #ffffff;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 3.2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgb(50, 50, 50);
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav li {
+    font-weight: 600;
+}
+
+.gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gameInfo h1 {
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    color: #ffffff;
+    text-align: center;
+}
+.gameInfo:hover {
+    transform: scale(1.02);
+  }
+
+.mainGame {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+}
+
+.box {
+    background-color: #fff;
+    border: 2.5px solid #3d3c3c;
+    font-size: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    
+    transition: background-color 0.2s;
+}
+
+.box:hover {
+    background-color: #c0bebe;
+}
+
+.turnInfo {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.info {
+    font-size: 2.2rem;
+}
+
+.sideContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.imgbox img {
+    width: 0;
+    transition: width 0.5s ease-in-out;
+    margin-bottom: 20px;
+}
+
+#reset {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
+}
+
+#reset:hover {
+    background-color: #218838;
+}
+
+.br-0 {
+    border-right: 0;
+}
+
+.bl-0 {
+    border-left: 0;
+}
+
+.bt-0 {
+    border-top: 0;
+}
+
+.bb-0 {
+    border-bottom: 0;
+}
+
+.winning-box {
+    background-color: #ffeb3b; 
+    animation: highlight 1s infinite;
+}
+
+@keyframes highlight {
+    0% { background-color: #f3e252; }
+    50% { background-color: #fff176; }
+    100% { background-color: #ffeb3b; }
+}
