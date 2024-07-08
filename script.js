@@ -1,16 +1,17 @@
 console.log("Welcome");
 let audioMove = new Audio("click.mp3");
 let audioWin = new Audio("win1.mp3");
-let turn = "X";
-let player = "X";
-let ai = "O";
+let player = "X"; 
+let ai = "O"; 
+let turn = player; 
 let game_over = false;
 let movesMade = 0;
+let aiThinkingTime = 1000;
 
 // Modal for choosing X or O
 const showModal = () => {
     document.getElementById('modal').style.display = 'flex';
-    document.getElementById('modal').classList.add('modal-visible'); // Added class to control visibility
+    document.getElementById('modal').classList.add('modal-visible');
 };
 
 const hideModal = () => {
@@ -18,23 +19,29 @@ const hideModal = () => {
     document.getElementById('modal').classList.remove('modal-visible');
 };
 
-showModal(); // Show modal initially
+showModal();
 
 document.getElementById('chooseX').addEventListener('click', () => {
     player = "X";
     ai = "O";
     turn = player;
-    hideModal(); // Hide modal after selection
-    document.querySelector('.info').innerText = "User's Turn " + turn; // Display user's turn
+    hideModal(); 
+    document.querySelector('.info').innerText = "User's Turn " + turn; 
     console.log("Player chose X");
 });
 
 document.getElementById('chooseO').addEventListener('click', () => {
     player = "O";
     ai = "X";
-    turn = ai;
-    hideModal(); // Hide modal after selection
-    aiMove(); // AI starts if player chooses O
+    turn = ai; 
+    hideModal(); 
+    document.querySelector('.info').innerText = "Ai's Turn " + turn; 
+    console.log("Player chose O");
+
+    // Introduce a delay for AI move after user's selection
+    setTimeout(() => {
+        aiMove(); 
+    }, aiThinkingTime);
 });
 
 // for Move_change
@@ -56,27 +63,28 @@ const checkWin = () => {
         [2, 4, 6],
     ];
 
-    wins.forEach(e => {
+    for (let i = 0; i < wins.length; i++) {
+        let [a, b, c] = wins[i];
         if (
-            boxtext[e[0]].innerText === boxtext[e[1]].innerText &&
-            boxtext[e[2]].innerText === boxtext[e[1]].innerText &&
-            boxtext[e[0]].innerText !== ""
+            boxtext[a].innerText !== "" &&
+            boxtext[a].innerText === boxtext[b].innerText &&
+            boxtext[a].innerText === boxtext[c].innerText
         ) {
-            let winner = boxtext[e[0]].innerText === player ? "User" : "AI";
+            let winner = boxtext[a].innerText === player ? "User" : "Ai";
             document.querySelector('.info').innerText = winner + " won!";
             game_over = true;
             document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "160px";
             audioWin.play();
 
-            e.forEach(index => {
+            // Highlight winning boxes
+            [a, b, c].forEach(index => {
                 boxtext[index].parentNode.classList.add('winning-box');
             });
+            return;
         }
-    });
-};
+    }
 
-// check for DRAW
-const checkDraw = () => {
+    // Check for draw
     if (movesMade === 9 && !game_over) {
         document.querySelector('.info').innerText = "It's a draw!";
         game_over = true;
@@ -88,19 +96,20 @@ const aiMove = () => {
     if (game_over) return;
     let boxtext = document.getElementsByClassName('boxtext');
     let emptyBoxes = [];
-    Array.from(boxtext).forEach((element, index) => {
-        if (element.innerText === '') emptyBoxes.push(index);
-    });
+    for (let i = 0; i < boxtext.length; i++) {
+        if (boxtext[i].innerText === '') {
+            emptyBoxes.push(i);
+        }
+    }
 
     if (emptyBoxes.length > 0) {
         let aiChoice = emptyBoxes[Math.floor(Math.random() * emptyBoxes.length)];
         boxtext[aiChoice].innerText = ai;
         movesMade++;
         checkWin();
-        checkDraw();
         if (!game_over) {
             turn = changeTurn();
-            document.getElementsByClassName("info")[0].innerText = "User's Turn " + turn;
+            document.querySelector('.info').innerText = "User's Turn " + turn;
         }
     }
 };
@@ -108,18 +117,17 @@ const aiMove = () => {
 // Game
 let boxes = document.getElementsByClassName("box");
 Array.from(boxes).forEach(element => {
-    let boxtext = element.querySelector('.boxtext');
     element.addEventListener('click', () => {
+        let boxtext = element.querySelector('.boxtext');
         if (boxtext.innerText === '' && !game_over && turn === player) {
             boxtext.innerText = turn;
             audioMove.play();
             movesMade++;
             checkWin();
-            checkDraw();
             if (!game_over) {
                 turn = changeTurn();
-                document.getElementsByClassName("info")[0].innerText = "User's Turn " + turn;
-                aiMove(); // AI takes its turn
+                document.querySelector('.info').innerText = "Ai's Turn " + turn;
+                setTimeout(aiMove, aiThinkingTime); 
             }
         }
     });
@@ -132,12 +140,14 @@ document.getElementById('reset').addEventListener('click', () => {
         element.innerText = "";
         element.parentNode.classList.remove('winning-box'); 
     });
-    turn = "X";
+    player = "X"; 
+    ai = "O"; 
+    turn = player;
     game_over = false;
-    movesMade = 0; // Reset movesMade
-    document.getElementsByClassName("info")[0].innerText = "User's Turn " + turn;
+    movesMade = 0; 
+    document.querySelector('.info').innerText = "User's Turn " + turn; 
     document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = '0px';
     audioWin.pause();
-    showModal(); // Show modal again on reset
+    showModal(); 
     console.log("Game reset");
 });
